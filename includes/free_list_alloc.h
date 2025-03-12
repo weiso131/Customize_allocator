@@ -10,6 +10,8 @@ typedef struct block {
 } block_t;
 
 
+extern block_t *root_block;
+extern block_t *tree_root;
 
 /**
  * init_fl - Initialize the maximum memory limit 
