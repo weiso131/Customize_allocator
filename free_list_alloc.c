@@ -141,7 +141,9 @@ void merge_b_to_a(block_t *a, block_t *b)
 {
     remove_free_tree(&tree_root, b);
     list_del(&b->list);
+    remove_free_tree(&tree_root, a);
     a->size = a->size + b->size + sizeof(block_t);
+    insert_free_tree(&tree_root, a);
 }
 
 int check_is_use(struct list_head *x)
