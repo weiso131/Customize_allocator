@@ -130,10 +130,10 @@ void *fl_alloc(size_t size)
         block_t *unuse = (block_t *) ((char *)(find + 1) + size);
         init_ptr(&unuse, find->size - size - sizeof(block_t));
         find->size = size;
-        find->use = 1;
         list_add(&unuse->list, &find->list);
         insert_free_tree(&tree_root, unuse);
     }
+    find->use = 1;
     return (char *)(find + 1);
 }
 
