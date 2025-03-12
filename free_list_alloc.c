@@ -99,16 +99,17 @@ void remove_free_tree(block_t **root, block_t *target)
 
 block_t *find_block_by_size(block_t *root, size_t size) 
 {
-    block_t *find = root;
+    block_t *find = root, *last_bigger = NULL;
     while (find != NULL && find->size != size) {
         if (size > find->size)
             find = find->r;
         else {
-            if (find->l == NULL)
-                break;
+            last_bigger = find;
             find = find->l;
         }
     }
+    if (!find)
+        find = last_bigger;
     return find;
 }
 
