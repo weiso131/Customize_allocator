@@ -137,6 +137,28 @@ void *fl_alloc(size_t size)
     return (char *)(find + 1);
 }
 
+void merge_b_to_a(block_t *a, block_t *b)
+{
+    remove_free_tree(&tree_root, b);
+    list_del(&b->list);
+    a->size = a->size + b->size + sizeof(block_t);
+}
+
+int check_is_use(struct list_head *x)
+{
+    if (x == root_head) return 0;
+    return !list_entry(x, block_t, list)->use;
+}
+
+void try_merge(block_t *block)
+{
+    struct list_head *next = block->list.next, *prev = block->list.prev;
+    if (check_is_use(next)) 
+        merge_b_to_a(block, list_entry(next, block_t, list));
+    if (check_is_use(prev))
+        merge_b_to_a(list_entry(prev, block_t, list), block);
+}
+
 void fl_free(void *ptr)
 {
     if ((char *) ptr == NULL) 
@@ -144,4 +166,5 @@ void fl_free(void *ptr)
     block_t *block_ptr = (block_t *) ((char *) ptr - sizeof(block_t));
     block_ptr->use = 0;
     insert_free_tree(&tree_root, block_ptr);
+    try_merge(block_ptr);
 }
