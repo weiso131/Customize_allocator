@@ -1,5 +1,8 @@
 #ifndef LIST_H
 #define LIST_H
+
+#include <stddef.h>
+
 /**
  * Feature detection for 'typeof':
  * - Supported as a GNU extension in GCC/Clang.
@@ -103,4 +106,37 @@ static inline void INIT_LIST_HEAD(struct list_head *head)
     head->next = head;
     head->prev = head;
 }
+
+/**
+ * list_del - Remove a node from a circular doubly-linked list
+ * @node: Pointer to the list_head structure to remove.
+ *
+ * Removes @node from its list by updating the adjacent nodes’ pointers to
+ * bypass it. The node’s memory and its containing structure, if any, are not
+ * freed. After removal, @node is left unlinked and should be treated as
+ * uninitialized; accessing its @next or @prev pointers is unsafe and may cause
+ * undefined behavior.
+ *
+ * Even previously initialized but unlinked nodes become uninitialized after
+ * this operation. To reintegrate @node into a list, it must be reinitialized
+ * (e.g., via INIT_LIST_HEAD).
+ *
+ * If LIST_POISONING is enabled at build time, @next and @prev are set to
+ * invalid addresses to trigger memory access faults on misuse. This feature is
+ * effective only on systems that restrict access to these specific addresses.
+ */
+static inline void list_del(struct list_head *node)
+{
+    struct list_head *next = node->next;
+    struct list_head *prev = node->prev;
+
+    next->prev = prev;
+    prev->next = next;
+
+#ifdef LIST_POISONING
+    node->next = NULL;
+    node->prev = NULL;
+#endif
+}
+
 #endif
