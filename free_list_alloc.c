@@ -8,6 +8,7 @@ block_t *init_block(size_t size)
     block_t *block = malloc(sizeof(block_t) + size);
     block->size = size;
     block->l = block->r = block->next = block->prev = NULL;
+    block->use = 0;
     return block;
 }
 
@@ -111,6 +112,7 @@ void init_ptr(block_t **ptr, size_t size)
 {
     (*ptr)->size = size;
     (*ptr)->l = (*ptr)->r = (*ptr)->next = (*ptr)->prev = NULL;
+    (*ptr)->use = 0;
 }
 
 void *fl_alloc(size_t size) 
@@ -123,6 +125,7 @@ void *fl_alloc(size_t size)
         block_t *unuse = (block_t *) ((char *)(find + 1) + size);
         init_ptr(&unuse, find->size - size - sizeof(block_t));
         find->size = size;
+        find->use = 1;
         insert_free_tree(&tree_root, unuse);
     }
 
@@ -134,5 +137,6 @@ void fl_free(void *ptr)
     if ((char *) ptr == NULL) 
         return;
     block_t *block_ptr = (block_t *) ((char *) ptr - sizeof(block_t));
+    block_ptr->use = 0;
     insert_free_tree(&tree_root, block_ptr);
 }

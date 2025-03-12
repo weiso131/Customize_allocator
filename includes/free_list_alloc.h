@@ -5,6 +5,7 @@
 #include <assert.h>
 typedef struct block {
     size_t size;
+    char use;
     struct block *next, *prev;
     struct block *l, *r;
 } block_t;
