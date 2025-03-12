@@ -122,6 +122,8 @@ void init_ptr(block_t **ptr, size_t size)
 
 void *fl_alloc(size_t size) 
 {
+    if (size == 0)
+        return NULL;
     block_t *find = find_block_by_size(tree_root, size);
     if (!find)
         return NULL;

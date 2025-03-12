@@ -28,7 +28,7 @@ void init_fl(size_t size);
 /**
  * fl_alloc - Allocate memory based on the size 
  * provided by the user and return a pointer.
- * If the allocation fails, return NULL.
+ * If the allocation fails or size is zero, return NULL.
  * @size: size provided by the user
  */
 void *fl_alloc(size_t size);
