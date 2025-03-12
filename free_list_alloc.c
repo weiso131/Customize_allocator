@@ -120,9 +120,9 @@ void *fl_alloc(size_t size)
         return NULL;
     remove_free_tree(&tree_root, find);
     if (find->size - size > sizeof(block_t)) {
-        find->size = size;
         block_t *unuse = (block_t *) ((char *)(find + 1) + size);
         init_ptr(&unuse, find->size - size - sizeof(block_t));
+        find->size = size;
         insert_free_tree(&tree_root, unuse);
     }
 
