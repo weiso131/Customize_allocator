@@ -3,16 +3,20 @@
 
 #include <stdlib.h>
 #include <assert.h>
+
+#include "list.h"
+
 typedef struct block {
     size_t size;
     char use;
-    struct block *next, *prev;
     struct block *l, *r;
+    struct list_head list;
 } block_t;
 
 
 extern block_t *root_block;
 extern block_t *tree_root;
+extern struct list_head *root_head;
 
 /**
  * init_fl - Initialize the maximum memory limit 

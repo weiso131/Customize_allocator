@@ -2,12 +2,13 @@
 #include <stdio.h>
 block_t *root_block;
 block_t *tree_root;
+struct list_head *root_head;
 
 block_t *init_block(size_t size)
 {
     block_t *block = malloc(sizeof(block_t) + size);
     block->size = size;
-    block->l = block->r = block->next = block->prev = NULL;
+    block->l = block->r = NULL;
     block->use = 0;
     return block;
 }
@@ -17,6 +18,8 @@ void init_fl(size_t size)
     root_block = init_block(size);
     assert(root_block != NULL);
     tree_root = root_block;
+    root_head = malloc(sizeof(struct list_head));
+    INIT_LIST_HEAD(root_head);
 }
 
 block_t **find_free_tree(block_t **root, block_t *target)
@@ -111,7 +114,7 @@ block_t *find_block_by_size(block_t *root, size_t size)
 void init_ptr(block_t **ptr, size_t size) 
 {
     (*ptr)->size = size;
-    (*ptr)->l = (*ptr)->r = (*ptr)->next = (*ptr)->prev = NULL;
+    (*ptr)->l = (*ptr)->r = NULL;
     (*ptr)->use = 0;
 }
 
