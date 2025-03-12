@@ -36,6 +36,7 @@ void *fl_alloc(size_t size);
 /**
  * fl_free - Free the memory corresponding to 
  * the pointer provided by the user.
+ * Do nothing if ptr is NULL or is already free.
  * @ptr: target memory to free
  */
 void fl_free(void *ptr);

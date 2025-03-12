@@ -134,7 +134,6 @@ void *fl_alloc(size_t size)
         list_add(&unuse->list, &find->list);
         insert_free_tree(&tree_root, unuse);
     }
-
     return (char *)(find + 1);
 }
 
@@ -165,6 +164,8 @@ void fl_free(void *ptr)
     if ((char *) ptr == NULL) 
         return;
     block_t *block_ptr = (block_t *) ((char *) ptr - sizeof(block_t));
+    if (block_ptr->use == 0)
+        return;
     block_ptr->use = 0;
     insert_free_tree(&tree_root, block_ptr);
     try_merge(block_ptr);
