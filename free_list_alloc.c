@@ -128,3 +128,11 @@ void *fl_alloc(size_t size)
 
     return (char *)(find + 1);
 }
+
+void fl_free(void *ptr)
+{
+    if ((char *) ptr == NULL) 
+        return;
+    block_t *block_ptr = (block_t *) ((char *) ptr - sizeof(block_t));
+    insert_free_tree(&tree_root, block_ptr);
+}
