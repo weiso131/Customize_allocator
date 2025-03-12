@@ -139,4 +139,16 @@ static inline void list_del(struct list_head *node)
 #endif
 }
 
+/**
+ * list_for_each - Iterate over list nodes
+ * @node: list_head pointer used as iterator
+ * @head: pointer to the head of the list
+ *
+ * The nodes and the head of the list must be kept unmodified while
+ * iterating through it. Any modifications to the the list will cause undefined
+ * behavior.
+ */
+#define list_for_each(node, head) \
+    for (node = (head)->next; node != (head); node = node->next)
+
 #endif
