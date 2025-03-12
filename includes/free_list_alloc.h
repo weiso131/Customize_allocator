@@ -1,5 +1,8 @@
+#ifndef FREE_LIST_ALLOC_H
+#define FREE_LIST_ALLOC_H
+
 #include <stdlib.h>
-#include <stdlib.h>
+#include <assert.h>
 typedef struct block {
     size_t size;
     struct block *next, *prev;
@@ -7,7 +10,6 @@ typedef struct block {
 } block_t;
 
 
-block_t *root_block = NULL;
 
 /**
  * init_fl - Initialize the maximum memory limit 
@@ -30,3 +32,5 @@ void *fl_alloc(size_t size);
  * @ptr: target memory to free
  */
 void fl_free(void *ptr);
+
+#endif
