@@ -22,7 +22,7 @@ block_t **find_free_tree(block_t **root, block_t *target)
 {
     block_t **node_ptr = root;
     while (*node_ptr != target && *node_ptr != NULL) {
-        if ((*node_ptr)->size > target->size)
+        if (target->size > (*node_ptr)->size)
             node_ptr = &(*node_ptr)->r;
         else
             node_ptr = &(*node_ptr)->l;
