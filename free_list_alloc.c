@@ -92,3 +92,39 @@ void remove_free_tree(block_t **root, block_t *target)
     target->r = NULL;
 }
 
+block_t *find_block_by_size(block_t *root, size_t size) 
+{
+    block_t *find = root;
+    while (find != NULL && find->size != size) {
+        if (size > find->size)
+            find = find->r;
+        else {
+            if (find->l == NULL)
+                break;
+            find = find->l;
+        }
+    }
+    return find;
+}
+
+void init_ptr(block_t **ptr, size_t size) 
+{
+    (*ptr)->size = size;
+    (*ptr)->l = (*ptr)->r = (*ptr)->next = (*ptr)->prev = NULL;
+}
+
+void *fl_alloc(size_t size) 
+{
+    block_t *find = find_block_by_size(tree_root, size);
+    if (!find)
+        return NULL;
+    remove_free_tree(&tree_root, find);
+    if (find->size - size > sizeof(block_t)) {
+        find->size = size;
+        block_t *unuse = (block_t *) ((char *)(find + 1) + size);
+        init_ptr(&unuse, find->size - size - sizeof(block_t));
+        insert_free_tree(&tree_root, unuse);
+    }
+
+    return (char *)(find + 1);
+}
