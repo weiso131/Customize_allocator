@@ -20,6 +20,7 @@ void init_fl(size_t size)
     tree_root = root_block;
     root_head = malloc(sizeof(struct list_head));
     INIT_LIST_HEAD(root_head);
+    list_add(&root_block->list, root_head);
 }
 
 block_t **find_free_tree(block_t **root, block_t *target)
@@ -129,6 +130,7 @@ void *fl_alloc(size_t size)
         init_ptr(&unuse, find->size - size - sizeof(block_t));
         find->size = size;
         find->use = 1;
+        list_add(&unuse->list, &find->list);
         insert_free_tree(&tree_root, unuse);
     }
 
