@@ -43,13 +43,14 @@ void stress_test()
         if (op == 0) {
 
             size_t size = rand() % (MAX_ALLOC_SIZE + 1);
-            printf("op: %d, size: %ld\n", op, size);
+            //printf("op: %d, size: %ld\n", op, size);
             void *p = fl_alloc(size);
             ptrs[i] = p;  
         } else {
             int index = rand() % (i + 1); 
-            printf("op: %d, ptr: %p\n", op, ptrs[index]);
+            //printf("op: %d, ptr: %p\n", op, ptrs[index]);
             fl_free(ptrs[index]); 
+            ptrs[index] = NULL;
         }
     }
 }
@@ -99,11 +100,9 @@ int main()
     count = list_size();
     assert(count == 4);
 
-    fl_free(array);
     fl_free(array2);
     show();
     fl_free(array3);
-    fl_free(array);
     count = list_size();
     assert(count == 1);
 
