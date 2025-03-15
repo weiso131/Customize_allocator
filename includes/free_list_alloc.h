@@ -10,6 +10,7 @@ typedef struct block {
     size_t size;
     char use;
     struct block *l, *r;
+    struct block **pprev;
     struct list_head list;
 } block_t;
 
